@@ -22,6 +22,7 @@ Functionality
 
 Usage
 --------------------------------------------------------------------------------------------
+
 • Install python [download](https://www.python.org/downloads/)
 
 • Run numbertypingautomation.py
@@ -29,3 +30,11 @@ Usage
 • Go to the app you want to program to work on
 
 • Profit!
+
+Comments 
+--------------------------------------------------------------------------------------------
+
+I've added the python script so you can see it's not a rat. This because of the executable, virus total detects false positives but on the python script no. I don't really know why but maybe is the way that **nuitka** compiles the programs.
+Here you can see the comparisons: 
+[.py analysis](https://www.virustotal.com/gui/file/8186c19a9a13e69941a302a398ed8ba22125440818fc196f543859fb9810d425/detection)  
+[.exe analysis](https://www.virustotal.com/gui/file/f4b5783a34dcb549b20e5336360ad54dc781cf85c9a0a5938936d24d03c07ece)
