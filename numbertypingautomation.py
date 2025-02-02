@@ -7,12 +7,14 @@ def clear_screen():
     """Clear the terminal screen based on the operating system."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
 def biased_sleep_time(min_time, max_time):
     sleep_ranges = [(min_time, (min_time + max_time) / 2), ((min_time + max_time) / 2, max_time)]
     weights = [1, 3] 
 
     selected_range = random.choices(sleep_ranges, weights)[0]
     return random.uniform(*selected_range)
+
 
 def get_filtered_numbers(start, end, digit_constraints):
     filtered_numbers = []
@@ -23,10 +25,11 @@ def get_filtered_numbers(start, end, digit_constraints):
             filtered_numbers.append(number)
     return filtered_numbers
 
+
 def main():
     while True:
         clear_screen()  
-        
+
         print("                                                                                                     ")
         print(" ███╗   ██╗██╗   ██╗███╗   ███╗██████╗ ███████╗██████╗     ████████╗██╗   ██╗██████╗ ██╗███╗   ██╗ ██████╗ ")
         print(" ████╗  ██║██║   ██║████╗ ████║██╔══██╗██╔════╝██╔══██╗    ╚══██╔══╝╚██╗ ██╔╝██╔══██╗██║████╗  ██║██╔════╝ ")
@@ -42,36 +45,36 @@ def main():
         print(" ██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║ ╚═╝ ██║██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║ ")
         print(" ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝  by za Cubes")
         print()
+
         start = int(input("Enter the starting number you want the bot to write from: "))
         clear_screen() 
 
-        end = int(input("Enter the ending number you want the bot to write to end from: "))
+        end = int(input("Enter the ending number you want the bot to write to: "))
         clear_screen() 
 
-        min_sleep = float(input("Enter the minimum random sleep time between numbers (in seconds) This first number will have the weight by 1: "))
-        clear_screen() 
-
-        max_sleep = float(input("Enter the maximum random sleep time between numbers (in seconds) This second number will have the weight by 3: "))
-        clear_screen()
-
-        # Get digit constraints
-        print("Enter the fixed digit position/s and value/s (e.g., '2 4' 2 for second digit and 4 as the value). Type 'done' when finished.")
+        use_sleep = input("Do you want to use random sleep between numbers? (yes/no): ").strip().lower() == 'yes'
+        if use_sleep:
+            min_sleep = float(input("Enter the minimum random sleep time between numbers (in seconds, weight 1): "))
+            clear_screen() 
+            max_sleep = float(input("Enter the maximum random sleep time between numbers (in seconds, weight 3): "))
+            clear_screen() 
+        
+        use_constraints = input("Do you want to apply fixed digit constraints? (yes/no): ").strip().lower() == 'yes'
         digit_constraints = {}
-        while True:
-            constraint = input("Digit position and value of it: ").strip().lower()
-            if constraint == "done":
-                break
-            try:
-                pos, value = map(int, constraint.split())
-                digit_constraints[pos] = value
-            except ValueError:
-                print("Invalid input. Please provide position and value separated by a space.")
-            
-            clear_screen()
+        if use_constraints:
+            print("Enter the fixed digit position/s and value/s (e.g., '2 4' for second digit as 4). Type 'done' when finished.")
+            while True:
+                constraint = input("Digit position and value of it: ").strip().lower()
+                if constraint == "done":
+                    break
+                try:
+                    pos, value = map(int, constraint.split())
+                    digit_constraints[pos] = value
+                except ValueError:
+                    print("Invalid input. Please provide position and value separated by a space.")
+                clear_screen()
 
-        print(f"Digit constraints applied: {digit_constraints}")
-
-        numbers = get_filtered_numbers(start, end, digit_constraints)
+        numbers = get_filtered_numbers(start, end, digit_constraints) if use_constraints else list(range(start, end + 1))
 
         if not numbers:
             print("No valid numbers found with the given constraints. Please try again.")
@@ -85,9 +88,12 @@ def main():
             pyautogui.typewrite(str(num))
             pyautogui.press('enter')
 
-            sleep_time = biased_sleep_time(min_sleep, max_sleep)
-            print(f"Typed {num}, waiting for {sleep_time:.2f} seconds...")
-            time.sleep(sleep_time)
+            if use_sleep:
+                sleep_time = biased_sleep_time(min_sleep, max_sleep)
+                print(f"Typed {num}, waiting for {sleep_time:.2f} seconds...")
+                time.sleep(sleep_time)
+            else:
+                print(f"Typed {num}.")
         
         break
 
